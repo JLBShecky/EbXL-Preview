@@ -1,0 +1,63 @@
+body 
+{
+	background:#000000;
+	margin:0px;
+	padding:0px;
+}
+
+#preview 
+{
+	background:#ffffff;
+	height:720px;
+	left:50%;
+	margin-left:-640px;
+	margin-top:-360px;
+	position:absolute;
+	top:50%;
+	width:1280px;
+}
+
+#saveImg
+{
+	border:none;
+	height:18px;
+	left:0px;
+	position:absolute;
+	top:0px;
+	width:32px;
+}
+
+#box_Settings
+{
+	background:#ffffff;
+	position:absolute;
+	right:0px;
+	width:250px;
+}
+
+#box_Settings>.settingsGroup
+{
+	margin:0px 5px 5px 5px;
+}
+	
+#box_Settings .setingsLabel
+{
+	display:inline-block;
+	min-width:85px;
+}
+
+#box_Settings>.settingsGroup input
+{
+	width:150px;
+}
+
+#box_Settings>.settingsGroup input[type=text]
+{
+	background:#FFF5FC;
+	border:none;
+}
+
+#box_Settings>.settingsGroup input[type=text]:active, #box_Settings>.settingsGroup input[type=text]:hover, #box_Settings>.settingsGroup input[type=text]:focused
+{
+	background:#fcd9f4;
+}

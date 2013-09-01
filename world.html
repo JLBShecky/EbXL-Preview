@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Terrain Generator Test</title>
+    
+    <link type="text/css" rel="stylesheet" href="css/main.css" />
+    
+    <script type="text/javascript" src="js/simplex.js"></script>
+    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+  </head>
+  <body>
+    <div id="box_Render">
+      <canvas id="preview" height="720" width="1280"></canvas>
+      <img id="saveImg" />
+    </div>
+    <div id="box_Settings">
+      <p class="settingsGroup">General Settings
+      <br /><span class="setingsLabel">Seed:</span><input id="txt_SettingsSeed" type="text" /></p>
+      <hr />
+      <p class="settingsGroup">Inland/Offshore Layer
+      <br /><span class="setingsLabel">Land Scale L:</span><input id="txt_SettingsLandScale" type="range" min="1" max="512" value="320" />
+      <br /><span class="setingsLabel">Land Scale S:</span><input id="txt_SettingsLandScaleGrain" type="range" min="0" max="64" value="0" />
+      <br /><span class="setingsLabel">Land Ratio:</span><input id="txt_SettingsLandRatio" type="range" min="-1" max="1"  value="0" step=".025" />
+      <br /><span class="setingsLabel">Det. Level:</span><input id="txt_SettingsDetailLevel" type="range" min="1" max="10"  value="8" step="1" />
+      <br /><span class="setingsLabel">Det. Ratio:</span><input id="txt_SettingsDetailRatio" type="range" min=".01" max=".99"  value="0.76" step=".01" />
+      <br /><span class="setingsLabel">Det. Factor:</span><input id="txt_SettingsDetailFactor" type="range" min="1.5" max="7"  value="2.125" step=".125" /></p>
+    </div>
+  </body>
+</html>
