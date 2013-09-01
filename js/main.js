@@ -12,14 +12,16 @@ $().ready(function (){
     if(e.type == "keydown" && e.keyCode != 13) return true;
     
     gen.setSeed($('#txt_SettingsSeed').val());
-    
+    BuildURL();
+        
     generateMap();
   });
   
-  $('#txt_SettingsLandScale, #txt_SettingsLandRatio, #txt_SettingsDetailRatio, #txt_SettingsDetailFactor, #txt_SettingsDetailLevel, #txt_SettingsLandScaleGrain').change(function(){
+  $('.settingsChangeEvent').change(function(){
     clearTimeout(genTimer);
     
     $('#txt_SettingsSeed')[0].title = this.value;
+    BuildURL();
     
     //this.title=this.value;
   
@@ -58,6 +60,8 @@ $().ready(function (){
   
   $('#txt_SettingsSeed').val("bob's your uncle");
   gen.setSeed("bob's your uncle");
+  
+  LoadURL();
   
   generateMap();
   
@@ -137,3 +141,76 @@ function generateMap()  {
   $('#saveImg')[0].src = $('#preview')[0].toDataURL();
 }
 
+function LoadURL(){
+  var hash = document.location.hash.substr(1);
+  var settings = hash.split("&");
+  
+  // 
+  for(var i = 0; i < settings.length; i++){
+    var cmd = settings[i].split("=");
+    
+    // Skip ahead if we don't have a value
+    if(typeof cmd[1] == "undefined") continue;
+            
+    switch(cmd[0]){
+      case "lScaleL":
+        $('#txt_SettingsLandScale').val(parseInt(cmd[1]));
+        break;
+      case "lScaleS":
+        $('#txt_SettingsLandScaleGrain').val(parseInt(cmd[1]));
+        break;
+      case "lRatio":
+        $('#txt_SettingsLandRatio').val(parseFloat(cmd[1]));
+        break;
+      case "lDetLVL":
+        $('#txt_SettingsDetailLevel').val(parseInt(cmd[1]));
+        break;
+      case "lDetRatio":
+        $('#txt_SettingsDetailRatio').val(parseFloat(cmd[1]));
+        break;
+      case "lDetFact":
+        $('#txt_SettingsDetailFactor').val(parseFloat(cmd[1]));
+        break;
+      case "seed":
+        $('#txt_SettingsSeed').val(decodeURIComponent(cmd[1]));
+        gen.setSeed($('#txt_SettingsSeed').val());
+        break;
+      case "x":
+        offsetX = parseInt(cmd[1]);
+        break;
+      case "y":
+        offsetY = parseInt(cmd[1]);
+        break;        
+      default:
+        break;
+    }
+  }
+}
+
+function BuildURL(){
+  var hash = "#";
+  
+  // Record the seed
+  hash += "seed=" + encodeURIComponent($('#txt_SettingsSeed').val());
+  
+  // Store the x and y offset
+  hash += "&x=" + offsetX;
+  hash += "&y=" + offsetY;
+  
+  // Store the scale
+  hash += "&lScaleL=" + $('#txt_SettingsLandScale').val();
+  hash += "&lScaleS=" + $('#txt_SettingsLandScaleGrain').val();
+  
+  // Land ratio
+  hash += "&lRatio=" + $('#txt_SettingsLandRatio').val();
+  
+  // Land detail levels
+  hash += "&lDetLVL=" + $('#txt_SettingsDetailLevel').val();
+  
+  // Frequancy and amplitude
+  hash += "&lDetRatio=" + $('#txt_SettingsDetailRatio').val();
+  hash += "&lDetFact=" + $('#txt_SettingsDetailFactor').val();
+  
+  // Store the hash  
+  document.location.hash = hash;
+}
