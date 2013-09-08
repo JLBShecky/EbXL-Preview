@@ -1,13 +1,16 @@
 body 
 {
-	background:#000000;
+	background-image:url(../img/mapbackground.jpg);
+	background-position:center;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-size: 100% 100%;
 	margin:0px;
 	padding:0px;
 }
 
 #preview 
 {
-	background:#ffffff;
 	height:720px;
 	left:50%;
 	margin-left:-640px;

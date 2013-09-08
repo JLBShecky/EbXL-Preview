@@ -38,12 +38,10 @@ function Simplex() {
   function generatePerm(seed) {
     if(arguments.length > 0) Math.seedrandom(seed);
     
-    
     // generate temp array
     var tmp = new Array(256);
     for(var i = 0; i < 256; i++) {
       tmp[i] = (Math.random() * 255) & 255;
-      //console.log(tmp[i]);
     }
     
     // To remove the need for index wrapping, double the permutation table length
@@ -54,7 +52,11 @@ function Simplex() {
   }
   
   // use the default perms
-  generatePerm();
+  if(arguments.length > 0) {
+    generatePerm(arguments[0]);
+  } else {
+    generatePerm();
+  }
   
   // Skewing and unskewing factors for 2, 3, and 4 dimensions
   var F2 = 0.5*(Math.sqrt(3.0)-1.0);
@@ -232,6 +234,129 @@ function Simplex() {
   }
 }
 
+function SimplexLayer() {
+  var cntOctives = 1;
+  var simplexOctives = [];
+  var layerSeed = (Math.random() * 18446744073709551615) -9223372036854775808;
+  var seedSeperator = "_";
+  var zoomLevel = 1;
+  var layerFrequency = 1;
+  var layerAmplitude = 1;
+  var layerScale = 1;
+  
+  function Gen2d(x, y) {
+    var val = 0;
+    var detail = zoomLevel * layerScale;
+    var pow = amplitudeLevel;
+    
+    for(var j = 0; j < cntOctives; j++) {
+      val += gen.noise2d(x/detail, y/detail) * pow;
+      detail /= layerFrequency;
+      pow *= amplitudeLevel;
+    }
+    
+    return val;
+  }
+  
+  function funScale(val){
+    if(arguments.length && parseFloat(val)) {
+      val = parseFloat(val);
+      if(val < 0) throw "Frequency out or range";
+      
+      layerScale = val;
+    }
+    
+    return layerScale;
+  }
+  
+  function funFrequency(val){
+    if(arguments.length && parseFloat(val)) {
+      val = parseFloat(val);
+      if(val < 0) throw "Frequency out or range";
+      
+      layerFrequency = val;
+    }
+    
+    return layerFrequency;
+  }
+  
+  function funAmplitude(val){
+    if(arguments.length && parseFloat(val)) {
+      val = parseFloat(val);
+      if(val < 0) throw "Amplitude out or range";
+      
+      layerAmplitude = val;
+    }
+    
+    return layerAmplitude;
+  }
+  
+  function funZoom(val){
+    if(arguments.length && parseFloat(val)) {
+      val = parseFloat(val);
+      if(val < 0) throw "Zoom out or range";
+      
+      zoomLevel = val;
+    }
+    
+    return zoomLevel;
+  }
+  
+  function funSeed(val) {
+    if(arguments.length) {
+      val = val.toString();
+      if(!val.length) val = ((Math.random() * 18446744073709551615) -9223372036854775808).toString();
+      
+      // Store the seed
+      layerSeed = val;
+      
+      // Reseed the layers
+      for(var i = 0; i < cntOctives; i++) {
+        simplexOctives[i].setSeed(layerSeed + seedSeperator + i);
+      }      
+    }
+    
+    return layerSeed;
+  }
+  
+  function SeedSeperator(sep) {
+    if(arguments.length) {
+      sep = sep.toString();
+      if(!sep.length) sep = "_";
+      
+      seedSeperator = sep;
+    }
+    
+    return seedSeperator;
+  }
+  
+  function Octives(num) {
+    if(arguments.length) {
+      if(!parseInt(num)) throw "Octive count must be a positive intiger";
+      if(num > 12) throw "Octive out of bounds";
+      cntOctives = parseInt(num);
+      
+      // Generate the initial octives
+      for(var i = simplexOctives.length; i < cntOctives; i++) {
+        simplexOctives[i] = new Simplex(layerSeed + seedSeperator + i);
+      }
+    }
+    
+    return cntOctives;
+  }
+
+  return {
+    amplitude: funAmplitude,
+    frequency: funFrequency,
+    generate2d: Gen2d,
+    octives: Octives,
+    scale: funScale,
+    seed: funSeed,
+    seedSeperator: SeedSeperator,
+    zoom: funZoom
+  };
+}
+
 var gen = new Simplex();
 
 function World() {
@@ -244,7 +369,7 @@ function World() {
     } else if(typeof arguments[0].length != "undefined" && arguments[0].length > 0) {
       seed = stringHash();
     } else {
-      seed = (Math.random() * 0xffffffff) & 0xffffffff;
+      seed = (Math.random() * 18446744073709551615) -9223372036854775808;
     }
   }
   

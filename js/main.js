@@ -41,10 +41,7 @@ $().ready(function (){
   });
   
   $('#preview').mousemove(function(e){
-    $('#preview')[0].title = "x: " + (e.offsetX + offsetX) + "\n" +
-                             "y: " + (e.offsetY + offsetY);
-                             
-    
+    $('#preview')[0].title = "x: " + (e.offsetX + offsetX) + "\n" + "y: " + (e.offsetY + offsetY);
   });
   
   $(window).mouseup(function(e){
@@ -63,7 +60,7 @@ $().ready(function (){
   
   LoadURL();
   
-  generateMap();
+  //generateMap();
   
 });
 
@@ -130,7 +127,7 @@ function generateMap()  {
     //imgData.data[i+2] = colors[biome][2];
     
     
-    imgData.data[i+3]=255;
+    imgData.data[i+3]=Math.max(255 - (((y + offsetY) * (y + offsetY)) + ((x + offsetX) * (x + offsetX)))/256, 0);
   }
   
   
